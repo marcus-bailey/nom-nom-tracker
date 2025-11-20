@@ -1,0 +1,110 @@
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.date-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+}
+
+.current-date {
+  text-align: center;
+  flex: 1;
+}
+
+.current-date h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.weekly-summary-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.weekly-summary-card .card-header {
+  border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+.weekly-summary-card .card-header h3 {
+  color: white;
+}
+
+.weekly-summary-card .stat-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.weekly-summary-card .stat-card h3 {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.weekly-summary-card .stat-card .value {
+  color: white;
+}
+
+.weekly-summary-card .stat-card .label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.no-entries {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 16px;
+}
+
+.meal-badge {
+  display: inline-block;
+  background: #2196F3;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.items-list {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.item-option {
+  padding: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.item-option:hover {
+  background-color: #f8f9ff;
+}
+
+.item-option.selected {
+  background-color: #e8f5e9;
+  border-left: 4px solid #4CAF50;
+}
+
+.item-name {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.item-stats {
+  font-size: 13px;
+  color: #666;
+}
+
+table button {
+  padding: 6px 12px;
+  font-size: 12px;
+}

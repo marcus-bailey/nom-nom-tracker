@@ -1,0 +1,142 @@
+.food-database {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.search-box {
+  margin-bottom: 30px;
+}
+
+.search-box input {
+  font-size: 16px;
+  padding: 15px;
+}
+
+.foods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.food-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.food-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.food-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.food-header h3 {
+  font-size: 18px;
+  color: #333;
+  margin: 0;
+  flex: 1;
+}
+
+.custom-badge {
+  background: #FF9800;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.food-details {
+  margin-bottom: 15px;
+}
+
+.serving-info {
+  background: #f8f9ff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #667eea;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.nutrition-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 15px;
+}
+
+.nutrition-row .label {
+  font-weight: 600;
+  color: #666;
+}
+
+.nutrition-row .value {
+  font-weight: bold;
+  color: #333;
+  font-size: 18px;
+}
+
+.macros-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.macro {
+  text-align: center;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 6px;
+}
+
+.macro-label {
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  letter-spacing: 0.5px;
+}
+
+.macro-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 3px;
+}
+
+.macro-percent {
+  font-size: 12px;
+  color: #666;
+}
+
+.food-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.food-actions button {
+  flex: 1;
+}
+
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  font-size: 16px;
+}

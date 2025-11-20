@@ -1,0 +1,279 @@
+.meal-builder {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.meals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.meal-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.meal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.meal-header {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.meal-header h3 {
+  font-size: 20px;
+  color: #333;
+  margin: 0;
+}
+
+.meal-description {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.meal-foods {
+  background: #f8f9ff;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.meal-foods h4 {
+  font-size: 14px;
+  color: #667eea;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.meal-foods ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.meal-foods li {
+  padding: 5px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.meal-nutrition {
+  margin-bottom: 15px;
+}
+
+.nutrition-summary {
+  margin-bottom: 15px;
+}
+
+.nutrition-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.nutrition-item .label {
+  font-weight: 600;
+  color: #666;
+  font-size: 14px;
+}
+
+.nutrition-item .value {
+  font-weight: bold;
+  color: #333;
+  font-size: 20px;
+}
+
+.meal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.meal-actions button {
+  flex: 1;
+}
+
+.large-modal {
+  max-width: 800px;
+}
+
+.helper-text {
+  color: #999;
+  font-size: 14px;
+  font-style: italic;
+  margin: 10px 0;
+}
+
+.selected-foods-list {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.selected-food-item {
+  padding: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.selected-food-item:last-child {
+  border-bottom: none;
+}
+
+.food-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.food-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.food-stats {
+  font-size: 13px;
+  color: #666;
+}
+
+.food-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.servings-input {
+  width: 80px;
+  padding: 8px;
+}
+
+.servings-label {
+  font-size: 13px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.food-search-results {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-top: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.food-search-item {
+  padding: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  transition: background-color 0.2s;
+}
+
+.food-search-item:hover {
+  background-color: #f8f9ff;
+}
+
+.food-search-item:last-child {
+  border-bottom: none;
+}
+
+.food-search-item button {
+  white-space: nowrap;
+}
+
+/* Meal totals summary in the form */
+.meal-totals-summary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  color: white;
+}
+
+.meal-totals-summary h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+}
+
+.totals-calories {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.totals-calories .label {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.totals-calories .value {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.totals-macros {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.totals-macros .macro {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 12px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.totals-macros .macro-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+  opacity: 0.9;
+}
+
+.totals-macros .macro-value {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.totals-macros .macro-percent {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.meal-totals-summary .macro-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+}
+

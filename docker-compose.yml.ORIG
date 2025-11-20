@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: nom-nom-db
+    environment:
+      POSTGRES_USER: nomnom
+      POSTGRES_PASSWORD: nomnom123
+      POSTGRES_DB: nomnomtracker
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nomnom"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nom-nom-network
+      - shared-db-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nom-nom-backend
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DATABASE_URL: postgresql://nomnom:nomnom123@postgres:5432/nomnomtracker
+    ports:
+      - "3003:3001"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: npm run dev
+    networks: 
+      - nom-nom-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nom-nom-frontend
+    environment:
+      - REACT_APP_API_URL=http://localhost:3003
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    command: npm start
+    networks: 
+      - nom-nom-network
+
+networks:
+  nom-nom-network:
+    driver: bridge
+  shared-db-net:
+    external: true
+
+volumes:
+  postgres_data:

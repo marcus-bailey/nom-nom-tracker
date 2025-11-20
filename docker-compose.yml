@@ -1,0 +1,93 @@
+# version: '3.8'
+
+services:
+  # ports not exposed to host.  restore with a mapping which doesn't conflict with kiro-inv-mgmt if needed
+  postgres:
+    image: postgres:15-alpine
+    container_name: nom-nom-db
+    environment:
+      POSTGRES_USER: nomnom
+      POSTGRES_PASSWORD: nomnom123
+      POSTGRES_DB: nomnomtracker
+      TZ: "America/Phoenix"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nomnom -d nomnomtracker"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nom-nom-network
+      - shared-db-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      # target: production   # ← recommended later for “production-like”
+      # target: development
+    container_name: nom-nom-backend
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DATABASE_URL: postgresql://nomnom:nomnom123@postgres:5432/nomnomtracker
+      TZ: "America/Phoenix"
+    ports:
+      - "3003:3001"
+    volumes:
+      - ./backend:/app
+      - backend_node_modules:/app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: npm run dev
+    networks: 
+      - nom-nom-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nom-nom-frontend
+    environment:
+      - REACT_APP_API_URL=http://localhost:3003
+      - TZ=America/Phoenix
+    ports:
+      - "3002:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    command: npm start
+    networks:
+      - nom-nom-network
+
+  backup:
+    image: prodrigestivill/postgres-backup-local
+    container_name: nom-nom-db-backup
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: nomnomtracker
+      POSTGRES_USER: nomnom
+      POSTGRES_PASSWORD: nomnom123
+      SCHEDULE: "@daily"
+      BACKUP_KEEP_DAYS: 7
+      BACKUP_KEEP_WEEKS: 4
+      BACKUP_KEEP_MONTHS: 3
+    volumes:
+      - ./backups:/backups
+    networks:
+      - nom-nom-network
+
+
+networks:
+  nom-nom-network:
+    driver: bridge
+  shared-db-net:
+    external: true
+
+volumes:
+  postgres_data:
+  backend_node_modules:
