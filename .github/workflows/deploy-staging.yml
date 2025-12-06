@@ -1,0 +1,39 @@
+name: Deploy to Staging
+
+# Triggers on successful CI pipeline to main branch
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  deploy-staging:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: Deploy to Staging Environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+
+      - name: Deploy notification
+        run: |
+          echo "🚀 Deploying to staging environment..."
+          echo "Commit: ${{ github.event.workflow_run.head_commit.message }}"
+          echo "Author: ${{ github.event.workflow_run.head_commit.author.name }}"
+
+      # Add your deployment steps here
+      # Examples:
+      # - Deploy to Docker registry
+      # - Push to Kubernetes cluster
+      # - Update staging environment
+      # - Run smoke tests
+      # - Send notifications to Slack/Discord
+
+      - name: Deployment complete
+        run: echo "✅ Staging deployment completed"

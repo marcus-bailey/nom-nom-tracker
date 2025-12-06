@@ -6,5 +6,8 @@
 		{
 			"path": "../docker/pgadmin"
 		}
-	]
+	],
+	"settings": {
+		"workbench.colorTheme": "Twin Blue"
+	}
 }

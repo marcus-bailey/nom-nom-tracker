@@ -77,7 +77,7 @@ code {
 
 /* Global styles */
 .container {
-  max-width: 1200px;
+  max-width: 2800px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -242,8 +242,8 @@ table tr:hover {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
   margin-bottom: 30px;
 }
 
