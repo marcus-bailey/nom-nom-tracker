@@ -32,6 +32,7 @@ services:
       NODE_ENV: development
       PORT: 3001
       DATABASE_URL: postgresql://nomnom:nomnom123@postgres:5432/nomnomtracker
+      AUTO_SEED: "true"
       TZ: "America/Phoenix"
     ports:
       - "3003:3001"
