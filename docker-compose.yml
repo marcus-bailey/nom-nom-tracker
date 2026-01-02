@@ -44,6 +44,7 @@ services:
     command: npm run dev
     networks: 
       - nom-nom-network
+      - app-network
 
   frontend:
     build:
@@ -51,7 +52,9 @@ services:
       dockerfile: Dockerfile
     container_name: nom-nom-frontend
     environment:
-      - REACT_APP_API_URL=http://localhost:3003
+      - REACT_APP_API_URL=/nom-nom/api
+      - PUBLIC_URL=/nom-nom
+      - HOST=0.0.0.0
       - TZ=America/Phoenix
     ports:
       - "3002:3000"
@@ -63,6 +66,7 @@ services:
     command: npm start
     networks:
       - nom-nom-network
+      - app-network
 
   backup:
     image: prodrigestivill/postgres-backup-local
@@ -86,6 +90,8 @@ networks:
   nom-nom-network:
     driver: bridge
   shared-db-net:
+    external: true
+  app-network:
     external: true
 
 volumes:
