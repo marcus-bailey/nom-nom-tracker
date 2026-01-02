@@ -14,8 +14,11 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Set PUBLIC_URL for the build
+# Set environment variables for the build
+# PUBLIC_URL: Sets the base path for all assets (js, css, images)
+# REACT_APP_API_URL: Sets the base URL for API calls (api.ts appends /api/... to this)
 ENV PUBLIC_URL=/nom-nom
+ENV REACT_APP_API_URL=/nom-nom
 
 # Build the application
 RUN npm run build
