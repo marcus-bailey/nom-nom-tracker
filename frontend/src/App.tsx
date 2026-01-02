@@ -8,6 +8,10 @@ import FoodDatabase from './components/FoodDatabase';
 import MealBuilder from './components/MealBuilder';
 import Analytics from './components/Analytics';
 
+// Get basename from PUBLIC_URL environment variable (set at build time)
+// This ensures React Router knows about the sub-path when deployed behind a reverse proxy
+const basename = process.env.PUBLIC_URL || '';
+
 function App() {
   const [activeTab, setActiveTab] = useState<string>('dashboard');
 
@@ -27,7 +31,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <Router>
+      <Router basename={basename}>
         <div className="app">
           <header className="app-header">
             <div className="container header-row">

@@ -52,7 +52,8 @@ services:
       dockerfile: Dockerfile
     container_name: nom-nom-frontend
     environment:
-      - REACT_APP_API_URL=/nom-nom/api
+      # REACT_APP_API_URL is the base for API calls - api.ts appends /api/... to this
+      - REACT_APP_API_URL=/nom-nom
       - PUBLIC_URL=/nom-nom
       - TZ=America/Phoenix
     ports:
