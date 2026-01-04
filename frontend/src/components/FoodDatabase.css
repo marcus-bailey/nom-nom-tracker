@@ -47,6 +47,25 @@
   flex: 1;
 }
 
+.protein-badge {
+  background: #4CAF50;
+  padding: 4px 4px 0px 4px;
+  border-radius: 8px;
+  font-size: 3px;
+}
+.fat-badge {
+  background: #FF9800;
+  padding: 4px 4px 0px 4px;
+  border-radius: 8px;
+  font-size: 3px;
+}
+.carb-badge {
+  background: #2196F3;
+  padding: 4px 4px 0px 4px;
+  border-radius: 8px;
+  font-size: 3px;
+}
+
 .custom-badge {
   background: #FF9800;
   color: white;
@@ -61,14 +80,16 @@
 }
 
 .serving-info {
-  background: var(--tertiary-bg);
-  padding: 8px 12px;
+  /* background: var(--tertiary-bg); */
+  /* padding: 8px 12px; */
   border-radius: 6px;
   font-size: 14px;
-  color: #667eea;
+  /* color: #667eea; */
+  color: var(--secondary-text);
   font-weight: 600;
   margin-bottom: 15px;
-  text-align: center;
+  /* text-align: center; */
+  text-align: left;
 }
 
 .nutrition-row {

@@ -108,7 +108,7 @@ const FoodDatabase: React.FC = () => {
               
               <div className="food-details">
                 <div className="serving-info">
-                  {food.serving_size} {food.serving_unit || 'g'}
+                  Serving Size: {food.serving_size} {food.serving_unit || 'g'}
                 </div>
                 
                 <div className="nutrition-row">
@@ -118,17 +118,17 @@ const FoodDatabase: React.FC = () => {
                 
                 <div className="macros-grid">
                   <div className="macro">
-                    <div className="macro-label">Protein</div>
+                    <div className="macro-label"><span className="protein-badge" style={{ marginRight: '5px' }}></span>Protein</div>
                     <div className="macro-value">{food.protein_grams}g</div>
                     <div className="macro-percent">{food.protein_percentage}%</div>
                   </div>
                   <div className="macro">
-                    <div className="macro-label">Net Carbs</div>
+                    <div className="macro-label"><span className="carb-badge" style={{ marginRight: '5px' }}></span>Net Carbs</div>
                     <div className="macro-value">{(food.net_carbs_grams || 0).toFixed(1)}g</div>
                     <div className="macro-percent">{food.carbs_percentage}%</div>
                   </div>
                   <div className="macro">
-                    <div className="macro-label">Fat</div>
+                    <div className="macro-label"><span className="fat-badge" style={{ marginRight: '5px' }}></span>Fat</div>
                     <div className="macro-value">{food.fat_grams}g</div>
                     <div className="macro-percent">{food.fat_percentage}%</div>
                   </div>
@@ -139,7 +139,7 @@ const FoodDatabase: React.FC = () => {
                     className="protein" 
                     style={{ width: `${food.protein_percentage}%` }}
                     title={`Protein: ${food.protein_percentage}%`}
-                  />
+                   />
                   <div 
                     className="carbs" 
                     style={{ width: `${food.carbs_percentage}%` }}
