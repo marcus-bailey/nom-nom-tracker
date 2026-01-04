@@ -19,7 +19,8 @@
 .current-date h2 {
   font-size: 28px;
   margin-bottom: 10px;
-  color: #333;
+  /* color: #333; */
+  color: var(--text);
 }
 
 .weekly-summary-card {

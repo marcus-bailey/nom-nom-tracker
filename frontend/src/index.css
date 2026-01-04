@@ -34,11 +34,13 @@
 
 /* Dark theme */
 [data-theme="dark"] {
-  --bg: #0f1720;
+  /* --bg: #0f1720; */
+  --bg: #1b2a3a;
   --text: #e6eef6;
   --muted: #a3b1c2;
   --border: #1f2933;
-  --card-bg: #0b1220;
+  /* --card-bg: #0b1220; */
+  --card-bg: #405265;
   --shadow: 0 2px 6px rgba(0,0,0,0.6);
 
   --primary: #34d399;
@@ -51,10 +53,12 @@
   --table-head-bg: #0b1220;
   --table-row-hover: rgba(255,255,255,0.02);
 
-  --modal-bg: #071223;
+  /* --modal-bg: #071223; */
+  --modal-bg: #405265;
   --modal-overlay: rgba(0,0,0,0.6);
 
-  --header-bg: linear-gradient(135deg, #111827 0%, #0b1220 100%);
+  /* --header-bg: linear-gradient(135deg, #131a2b 0%, #0b1220 100%); */
+  --header-bg: #131a2b;
   --header-text: #ffffff;
   --nav-bg: #071223;
   --footer-bg: #071223;

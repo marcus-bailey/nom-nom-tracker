@@ -35,6 +35,8 @@ cd /Users/xodev/dev/code/nom-nom-tracker
 
 ### 2. Start the application
 
+To run the entire application with Docker Compose, execute:
+
 ```bash
 docker-compose up --build
 ```
@@ -45,6 +47,24 @@ This command will:
 - Run database migrations automatically
 - Start the backend API server
 - Start the React development server
+
+
+To run the frontend and backend locally without Docker:
+
+```bash
+# In one terminal, start the backend
+cd backend
+npm install
+DATABASE_URL=postgresql://nomnom:nomnom123@localhost:5432/nomnomtracker npm run dev
+
+# In another terminal, start the frontend
+cd frontend
+npm install
+REACT_APP_API_URL=http://localhost:3003 npm start
+
+# In a third terminal, start PostgreSQL (if not already running)
+docker compose up -d postgres
+```
 
 ### 3. Seed the database (optional but recommended)
 

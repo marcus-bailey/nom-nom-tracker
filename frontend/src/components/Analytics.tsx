@@ -98,7 +98,7 @@ const Analytics: React.FC = () => {
       <div className="analytics">
         <div className="card">
           <div className="card-header">
-            <h2>Analytics & Trends</h2>
+            <h2 style={{ margin: '8px 0' }}>Analytics & Trends</h2>
           </div>
           <p className="no-data">No data available for the selected time range. Start logging your meals to see analytics!</p>
         </div>
@@ -141,7 +141,7 @@ const Analytics: React.FC = () => {
     <div className="analytics">
       <div className="card">
         <div className="card-header">
-          <h2>Analytics & Trends</h2>
+          <h2 style={{ margin: '8px 0' }}>Analytics & Trends</h2>
           <div className="time-range-selector">
             <button
               className={timeRange === 'week' ? 'primary' : 'outline'}
@@ -197,8 +197,8 @@ const Analytics: React.FC = () => {
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={dailyChartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
+              <XAxis dataKey="date" tick={{ fill: 'var(--text)' }} />
+              <YAxis tick={{ fill: 'var(--text)' }} />
               <Tooltip />
               <Legend />
               <Line type="monotone" dataKey="calories" stroke="#667eea" strokeWidth={2} name="Calories" />
@@ -212,8 +212,8 @@ const Analytics: React.FC = () => {
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={dailyChartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
+              <XAxis dataKey="date" tick={{ fill: 'var(--text)' }} />
+              <YAxis tick={{ fill: 'var(--text)' }} />
               <Tooltip />
               <Legend />
               <Line type="monotone" dataKey="protein" stroke={COLORS.protein} strokeWidth={2} name="Protein (g)" />
@@ -229,8 +229,8 @@ const Analytics: React.FC = () => {
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={dailyChartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
+              <XAxis dataKey="date" tick={{ fill: 'var(--text)' }} />
+              <YAxis tick={{ fill: 'var(--text)' }} />
               <Tooltip />
               <Legend />
               <Bar dataKey="protein" fill={COLORS.protein} name="Protein (g)" />

@@ -14,7 +14,8 @@
 
 .analytics-summary h3 {
   font-size: 18px;
-  color: #666;
+  /* color: #666; */
+  color: var(--text);
   margin-bottom: 20px;
 }
 
@@ -30,7 +31,8 @@
 
 .chart-section h3 {
   font-size: 20px;
-  color: #333;
+  /* color: #333; */
+  color: var(--text);
   margin-bottom: 20px;
 }
 
@@ -43,13 +45,15 @@
 .no-data {
   text-align: center;
   padding: 60px 20px;
-  color: #999;
+  /* color: #999; */
+  color: var(--text);
   font-size: 16px;
 }
 
 /* Recharts customization */
 .recharts-legend-item-text {
-  color: #666 !important;
+  /* color: #666 !important; */
+  color: var(--text) !important;
 }
 
 .recharts-tooltip-wrapper {
@@ -57,7 +61,8 @@
 }
 
 .recharts-default-tooltip {
-  background: white !important;
+  /* background: white !important; */
+  background: var(--bg) !important;
   border: 1px solid #ddd !important;
   border-radius: 6px !important;
   padding: 10px !important;
