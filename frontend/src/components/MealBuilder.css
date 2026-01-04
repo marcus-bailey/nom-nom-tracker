@@ -145,12 +145,12 @@
 
 .food-name {
   font-weight: 600;
-  color: #333;
+  color: var(--secondary-text);
 }
 
 .food-stats {
   font-size: 13px;
-  color: #666;
+  color: var(--secondary-text);
 }
 
 .food-controls {
@@ -187,10 +187,12 @@
   gap: 15px;
   transition: background-color 0.2s;
   background-color: var(--secondary-bg);
+  color: var(--secondary-text);
 }
 
 .food-search-item:hover {
   background-color: #f8f9ff;
+  color: var(--secondary-text);
 }
 
 .food-search-item:last-child {
