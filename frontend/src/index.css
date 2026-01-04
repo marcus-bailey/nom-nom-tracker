@@ -279,8 +279,9 @@ table tr:hover {
 }
 
 .stat-card .label {
-  font-size: 12px;
-  color: #666;
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 600;
 }
 
 .macro-bar {
