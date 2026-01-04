@@ -126,6 +126,7 @@
 .selected-food-item {
   padding: 15px;
   border-bottom: 1px solid #f0f0f0;
+  background-color: var(--secondary-bg);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -162,6 +163,7 @@
 .servings-input {
   width: 80px;
   padding: 8px;
+  color: var(--secondary-text);
 }
 
 .servings-label {
