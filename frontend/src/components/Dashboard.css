@@ -86,23 +86,25 @@
 }
 
 .item-option:hover {
-  background-color: #f8f9ff;
+  /* background-color: #f8f9ff; */
+  background-color: var(--table-row-hover);
 }
 
 .item-option.selected {
-  background-color: #e8f5e9;
+  /* background-color: #e8f5e9; */
+  background-color: var(--primary);
   border-left: 4px solid #4CAF50;
 }
 
 .item-name {
   font-weight: 600;
   margin-bottom: 5px;
-  color: #333;
+  color: var(--text);
 }
 
 .item-stats {
   font-size: 13px;
-  color: #666;
+  color: var(--text);
 }
 
 table button {
