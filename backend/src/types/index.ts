@@ -42,6 +42,9 @@ export interface MealWithTotals extends Meal {
     protein_grams: number;
     net_carbs_grams: number;
     fat_grams: number;
+    protein_percentage: string;
+    carbs_percentage: string;
+    fat_percentage: string;
   };
 }
 

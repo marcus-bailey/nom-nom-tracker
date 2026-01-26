@@ -35,15 +35,28 @@ const calculateMealTotals = (meal: MealQueryResult): MealWithTotals => {
   
   const netCarbs = totals.carbs_grams - totals.fiber_grams;
   const totalCalories = totals.calories || 0;
+
+  const proteinCals = totals.protein_grams * 4;
+  const carbsCals = netCarbs * 4;
+  const fatCals = totals.fat_grams * 9;
+  const totalMacroCals = proteinCals + carbsCals + fatCals;
+
+  const proteinPercentage = totalMacroCals > 0 ? ((proteinCals / totalMacroCals) * 100).toFixed(1) : '0';
+  const carbsPercentage = totalMacroCals > 0 ? ((carbsCals / totalMacroCals) * 100).toFixed(1) : '0';
+  const fatPercentage = totalMacroCals > 0 ? ((fatCals / totalMacroCals) * 100).toFixed(1) : '0';
   
   return {
     ...meal,
     foods: foods as any,
     totals: {
-      calories: totals.calories,
+      // calories: totals.calories,
+      calories: totalCalories,
       protein_grams: totals.protein_grams,
       net_carbs_grams: netCarbs,
       fat_grams: totals.fat_grams,
+      protein_percentage: proteinPercentage,
+      carbs_percentage: carbsPercentage,
+      fat_percentage: fatPercentage,
     }
   };
 };
