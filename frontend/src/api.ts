@@ -11,7 +11,13 @@ import {
   CreateLogRequest
 } from './types';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+const rawApiUrl = (process.env.REACT_APP_API_URL || '').trim();
+const isDev = process.env.NODE_ENV === 'development';
+const isRelativeUrl = rawApiUrl !== '' && !/^https?:\/\//i.test(rawApiUrl);
+
+const API_URL = rawApiUrl
+  ? (isDev && isRelativeUrl ? 'http://localhost:3003' : rawApiUrl)
+  : (isDev ? 'http://localhost:3003' : '');
 
 const api: AxiosInstance = axios.create({
   baseURL: API_URL,

@@ -39,6 +39,7 @@ const MealBuilder: React.FC = () => {
         mealsAPI.getAll(),
         foodsAPI.getAll(),
       ]);
+      console.log('loadData mealsRes:', mealsRes);
       setMeals(mealsRes.data);
       setFoods(foodsRes.data);
       setError(null);
