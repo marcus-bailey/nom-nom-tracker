@@ -10,7 +10,7 @@
 }
 
 .meal-card {
-  background: white;
+  background: var(--secondary-bg);
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -25,24 +25,24 @@
 .meal-header {
   margin-bottom: 15px;
   padding-bottom: 15px;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 2px solid var(--border, #f0f0f0);
 }
 
 .meal-header h3 {
   font-size: 20px;
-  color: #333;
+  color: var(--secondary-text);
   margin: 0;
 }
 
 .meal-description {
-  color: #666;
+  color: var(--secondary-text);
   font-size: 14px;
   margin-bottom: 15px;
   line-height: 1.5;
 }
 
 .meal-foods {
-  background: #f8f9ff;
+  background: var(--tertiary-bg, #f8f9ff);
   padding: 15px;
   border-radius: 6px;
   margin-bottom: 20px;
@@ -64,7 +64,7 @@
 
 .meal-foods li {
   padding: 5px 0;
-  color: #555;
+  color: var(--secondary-text);
   font-size: 14px;
 }
 
@@ -80,18 +80,18 @@
   display: flex;
   justify-content: space-between;
   padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border, #f0f0f0);
 }
 
 .nutrition-item .label {
   font-weight: 600;
-  color: #666;
+  color: var(--secondary-text);
   font-size: 14px;
 }
 
 .nutrition-item .value {
   font-weight: bold;
-  color: #333;
+  color: var(--secondary-text);
   font-size: 20px;
 }
 
@@ -110,14 +110,14 @@
 }
 
 .helper-text {
-  color: #999;
+  color: var(--secondary-text);
   font-size: 14px;
   font-style: italic;
   margin: 10px 0;
 }
 
 .selected-foods-list {
-  border: 1px solid #ddd;
+  border: 1px solid var(--border, #ddd);
   border-radius: 6px;
   max-height: 300px;
   overflow-y: auto;
@@ -125,7 +125,7 @@
 
 .selected-food-item {
   padding: 15px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border, #f0f0f0);
   background-color: var(--secondary-bg);
   display: flex;
   justify-content: space-between;
@@ -168,12 +168,12 @@
 
 .servings-label {
   font-size: 13px;
-  color: #666;
+  color: var(--secondary-text);
   white-space: nowrap;
 }
 
 .food-search-results {
-  border: 1px solid #ddd;
+  border: 1px solid var(--border, #ddd);
   border-radius: 6px;
   margin-top: 10px;
   max-height: 300px;
@@ -182,7 +182,7 @@
 
 .food-search-item {
   padding: 15px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border, #f0f0f0);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -193,7 +193,7 @@
 }
 
 .food-search-item:hover {
-  background-color: #f8f9ff;
+  background-color: var(--tertiary-bg, #f8f9ff);
   color: var(--secondary-text);
 }
 
