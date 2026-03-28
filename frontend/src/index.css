@@ -357,6 +357,23 @@ table tr:hover {
   color: var(--text);
 }
 
+/* Confirmation modal */
+.confirm-modal {
+  max-width: 400px;
+}
+
+.confirm-modal-message {
+  color: var(--muted);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 /* Theme toggle button */
 .theme-toggle {
   background: transparent;
