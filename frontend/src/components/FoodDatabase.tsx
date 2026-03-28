@@ -1,6 +1,7 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { foodsAPI } from '../api';
 import { Food, CreateFoodRequest } from '../types';
+import ConfirmModal from './ConfirmModal';
 import './FoodDatabase.css';
 
 interface FoodFormModalProps {
@@ -27,6 +28,7 @@ const FoodDatabase: React.FC = () => {
   const [editingFood, setEditingFood] = useState<Food | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
 
   useEffect(() => {
     loadFoods();
@@ -47,14 +49,14 @@ const FoodDatabase: React.FC = () => {
   };
 
   const handleDelete = async (id: number): Promise<void> => {
-    if (window.confirm('Are you sure you want to delete this food?')) {
-      try {
-        await foodsAPI.delete(id);
-        await loadFoods();
-      } catch (err) {
-        console.error('Error deleting food:', err);
-        alert('Failed to delete food.');
-      }
+    try {
+      await foodsAPI.delete(id);
+      await loadFoods();
+    } catch (err) {
+      console.error('Error deleting food:', err);
+      setError('Failed to delete food.');
+    } finally {
+      setConfirmDeleteId(null);
     }
   };
 
@@ -158,7 +160,7 @@ const FoodDatabase: React.FC = () => {
                   Edit
                 </button>
                 {food.is_custom && (
-                  <button className="danger" onClick={() => handleDelete(food.id)}>
+                  <button className="danger" onClick={() => setConfirmDeleteId(food.id)}>
                     Delete
                   </button>
                 )}
@@ -184,6 +186,16 @@ const FoodDatabase: React.FC = () => {
             setEditingFood(null);
             loadFoods();
           }}
+        />
+      )}
+
+      {confirmDeleteId !== null && (
+        <ConfirmModal
+          title="Delete Food"
+          message="Are you sure you want to delete this food? This action cannot be undone."
+          confirmLabel="Delete"
+          onConfirm={() => handleDelete(confirmDeleteId)}
+          onCancel={() => setConfirmDeleteId(null)}
         />
       )}
     </div>

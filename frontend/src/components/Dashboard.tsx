@@ -2,6 +2,7 @@ import React, { useState, useEffect, FormEvent } from 'react';
 import { format, startOfWeek, addDays } from 'date-fns';
 import { logsAPI, analyticsAPI, foodsAPI, mealsAPI } from '../api';
 import { Food, Meal, FoodLog, DailySummary, WeeklySummary } from '../types';
+import ConfirmModal from './ConfirmModal';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
@@ -12,9 +13,9 @@ const Dashboard: React.FC = () => {
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [foods, setFoods] = useState<Food[]>([]);
   const [meals, setMeals] = useState<Meal[]>([]);
-  const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
 
   const weekStart = startOfWeek(currentDate, { weekStartsOn: 0 }); // Sunday
 
@@ -82,25 +83,17 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleDeleteLog = async (id: number) => {
-    if (window.confirm('Are you sure you want to delete this entry?')) {
-      try {
-        await logsAPI.delete(id);
-        await loadData();
-      } catch (err) {
-        console.error('Error deleting log:', err);
-        alert('Failed to delete entry.');
-      }
+  const handleDeleteLog = async (id: number): Promise<void> => {
+    try {
+      await logsAPI.delete(id);
+      await loadData();
+    } catch (err) {
+      console.error('Error deleting log:', err);
+      setError('Failed to delete entry.');
+    } finally {
+      setConfirmDeleteId(null);
     }
   };
-
-  const filteredFoods = foods.filter(food =>
-    food.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const filteredMeals = meals.filter(meal =>
-    meal.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   if (loading) {
     return <div className="loading">Loading...</div>;
@@ -266,7 +259,7 @@ const Dashboard: React.FC = () => {
                   <td>
                     <button 
                       className="danger" 
-                      onClick={() => handleDeleteLog(log.id)}
+                      onClick={() => setConfirmDeleteId(log.id)}
                     >
                       Delete
                     </button>
@@ -281,47 +274,62 @@ const Dashboard: React.FC = () => {
       {/* Add Entry Modal */}
       {showAddModal && (
         <AddEntryModal
-          foods={filteredFoods}
-          meals={filteredMeals}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
+          foods={foods}
+          meals={meals}
           onAdd={handleAddLog}
           onClose={() => setShowAddModal(false)}
+        />
+      )}
+
+      {confirmDeleteId !== null && (
+        <ConfirmModal
+          title="Delete Entry"
+          message="Are you sure you want to delete this entry? This action cannot be undone."
+          confirmLabel="Delete"
+          onConfirm={() => handleDeleteLog(confirmDeleteId)}
+          onCancel={() => setConfirmDeleteId(null)}
         />
       )}
     </div>
   );
 };
 
+type CombinedEntry =
+  | { type: 'food'; item: Food }
+  | { type: 'meal'; item: Meal };
+
 interface AddEntryModalProps {
   foods: Food[];
   meals: Meal[];
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
   onAdd: (type: 'food' | 'meal', item: Food | Meal, servings: number) => void;
   onClose: () => void;
 }
 
-const AddEntryModal: React.FC<AddEntryModalProps> = ({ 
-  foods, 
-  meals, 
-  searchTerm, 
-  setSearchTerm, 
-  onAdd, 
-  onClose 
-}) => {
-  const [selectedType, setSelectedType] = useState<'food' | 'meal'>('food');
-  const [selectedItem, setSelectedItem] = useState<Food | Meal | null>(null);
+const AddEntryModal: React.FC<AddEntryModalProps> = ({ foods, meals, onAdd, onClose }) => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedEntry, setSelectedEntry] = useState<CombinedEntry | null>(null);
   const [servings, setServings] = useState<number>(1);
+
+  const allItems: CombinedEntry[] = [
+    ...foods.map((item): CombinedEntry => ({ type: 'food', item })),
+    ...meals.map((item): CombinedEntry => ({ type: 'meal', item })),
+  ];
+
+  const filteredItems = allItems.filter(entry =>
+    entry.item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (selectedItem) {
-      onAdd(selectedType, selectedItem, servings);
+    if (selectedEntry) {
+      onAdd(selectedEntry.type, selectedEntry.item, servings);
     }
   };
 
-  const items = selectedType === 'food' ? foods : meals;
+  const isSelected = (entry: CombinedEntry) =>
+    selectedEntry !== null &&
+    selectedEntry.type === entry.type &&
+    selectedEntry.item.id === entry.item.id;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -333,73 +341,59 @@ const AddEntryModal: React.FC<AddEntryModalProps> = ({
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Type</label>
-            <div className="button-group">
-              <button
-                type="button"
-                className={selectedType === 'food' ? 'primary' : 'outline'}
-                onClick={() => {
-                  setSelectedType('food');
-                  setSelectedItem(null);
-                }}
-              >
-                Food
-              </button>
-              <button
-                type="button"
-                className={selectedType === 'meal' ? 'primary' : 'outline'}
-                onClick={() => {
-                  setSelectedType('meal');
-                  setSelectedItem(null);
-                }}
-              >
-                Meal
-              </button>
-            </div>
-          </div>
-
-          <div className="form-group">
             <label>Search</label>
             <input
               type="text"
-              placeholder={`Search ${selectedType}s...`}
+              placeholder="Search foods and meals..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setSelectedEntry(null);
+              }}
+              autoFocus
             />
           </div>
 
           <div className="form-group">
-            <label>Select {selectedType === 'food' ? 'Food' : 'Meal'}</label>
+            <label>Select Item</label>
             <div className="items-list">
-              {items.map(item => (
+              {filteredItems.map(entry => (
                 <div
-                  key={item.id}
-                  className={`item-option ${selectedItem?.id === item.id ? 'selected' : ''}`}
-                  onClick={() => setSelectedItem(item)}
+                  key={`${entry.type}-${entry.item.id}`}
+                  className={`item-option ${isSelected(entry) ? 'selected' : ''}`}
+                  onClick={() => setSelectedEntry(entry)}
                 >
-                  <div className="item-name">{item.name}</div>
+                  <div className="item-option-header">
+                    <div className="item-name">{entry.item.name}</div>
+                    <span className={`item-type-badge item-type-badge--${entry.type}`}>
+                      {entry.type === 'food' ? 'Food' : 'Meal'}
+                    </span>
+                  </div>
                   <div className="item-stats">
-                    {selectedType === 'food' ? (
+                    {entry.type === 'food' ? (
                       <>
-                        {(item as Food).calories} cal | P: {(item as Food).protein_grams}g | C: {((item as Food).carbs_grams - (item as Food).fiber_grams).toFixed(1)}g | F: {(item as Food).fat_grams}g
+                        {(entry.item as Food).calories} cal | P: {(entry.item as Food).protein_grams}g | C: {((entry.item as Food).carbs_grams - (entry.item as Food).fiber_grams).toFixed(1)}g | F: {(entry.item as Food).fat_grams}g
                       </>
                     ) : (
-                      (item as Meal).totals && (
+                      (entry.item as Meal).totals && (
                         <>
-                          {parseFloat(String((item as Meal).totals!.calories)).toFixed(0)} cal | 
-                          P: {parseFloat(String((item as Meal).totals!.protein_grams)).toFixed(0)}g | 
-                          C: {parseFloat(String((item as Meal).totals!.net_carbs_grams)).toFixed(0)}g | 
-                          F: {parseFloat(String((item as Meal).totals!.fat_grams)).toFixed(0)}g
+                          {parseFloat(String((entry.item as Meal).totals!.calories)).toFixed(0)} cal |
+                          P: {parseFloat(String((entry.item as Meal).totals!.protein_grams)).toFixed(0)}g |
+                          C: {parseFloat(String((entry.item as Meal).totals!.net_carbs_grams)).toFixed(0)}g |
+                          F: {parseFloat(String((entry.item as Meal).totals!.fat_grams)).toFixed(0)}g
                         </>
                       )
                     )}
                   </div>
                 </div>
               ))}
+              {filteredItems.length === 0 && (
+                <p className="no-results">No items match your search.</p>
+              )}
             </div>
           </div>
 
-          {selectedItem && (
+          {selectedEntry && (
             <div className="form-group">
               <label>Servings</label>
               <input
@@ -413,7 +407,7 @@ const AddEntryModal: React.FC<AddEntryModalProps> = ({
           )}
 
           <div className="button-group">
-            <button type="submit" className="primary" disabled={!selectedItem}>
+            <button type="submit" className="primary" disabled={!selectedEntry}>
               Add Entry
             </button>
             <button type="button" className="outline" onClick={onClose}>
