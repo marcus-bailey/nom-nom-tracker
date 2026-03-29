@@ -56,8 +56,10 @@
   color: white;
 }
 
-.dashboard-col-right .weekly-summary-card .stats-grid {
-  grid-template-columns: 1fr;
+@media (min-width: 901px) {
+  .dashboard-col-right .weekly-summary-card .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .weekly-summary-card .card-header {
