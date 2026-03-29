@@ -239,28 +239,29 @@ const Dashboard: React.FC = () => {
         <div className="dashboard-col-right">
           <div className="card weekly-summary-card">
             <div className="card-header">
-              <h3>Week Summary ({format(weekStart, 'MMM d')} - {format(addDays(weekStart, 6), 'MMM d, yyyy')})</h3>
+              <h3>Weekly Averages ({format(weekStart, 'MMM d')} - {format(addDays(weekStart, 6), 'MMM d, yyyy')})</h3>
             </div>
             {weeklySummary && (
               <>
                 <div className="stats-grid">
                   <div className="stat-card">
-                    <h3>Weekly Calories</h3>
-                    <div className="value">{parseFloat(weeklySummary.total_calories).toFixed(0)}</div>
+                    <h3>Avg Calories</h3>
+                    <div className="value">{parseFloat(weeklySummary.avg_calories).toFixed(0)}</div>
+                    <div className="label">{weeklySummary.day_count} day{weeklySummary.day_count !== 1 ? 's' : ''} logged</div>
                   </div>
                   <div className="stat-card">
-                    <h3>Protein</h3>
-                    <div className="value">{parseFloat(weeklySummary.total_protein).toFixed(0)}g</div>
+                    <h3>Avg Protein</h3>
+                    <div className="value">{parseFloat(weeklySummary.avg_protein).toFixed(0)}g</div>
                     <div className="label">{weeklySummary.protein_percentage}%</div>
                   </div>
                   <div className="stat-card">
-                    <h3>Net Carbs</h3>
-                    <div className="value">{parseFloat(weeklySummary.total_net_carbs).toFixed(0)}g</div>
+                    <h3>Avg Net Carbs</h3>
+                    <div className="value">{parseFloat(weeklySummary.avg_net_carbs).toFixed(0)}g</div>
                     <div className="label">{weeklySummary.carbs_percentage}%</div>
                   </div>
                   <div className="stat-card">
-                    <h3>Fat</h3>
-                    <div className="value">{parseFloat(weeklySummary.total_fat).toFixed(0)}g</div>
+                    <h3>Avg Fat</h3>
+                    <div className="value">{parseFloat(weeklySummary.avg_fat).toFixed(0)}g</div>
                     <div className="label">{weeklySummary.fat_percentage}%</div>
                   </div>
                 </div>

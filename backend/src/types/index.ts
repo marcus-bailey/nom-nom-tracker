@@ -137,6 +137,10 @@ export interface WeeklySummary {
   total_protein: number;
   total_net_carbs: number;
   total_fat: number;
+  avg_calories: number;
+  avg_protein: number;
+  avg_net_carbs: number;
+  avg_fat: number;
   protein_percentage: string;
   carbs_percentage: string;
   fat_percentage: string;

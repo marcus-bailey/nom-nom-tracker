@@ -119,6 +119,8 @@ router.get('/weekly/:start_date', async (req: Request, res: Response): Promise<v
       ORDER BY log_date
     `, [start_date]);
     
+    const dayCount = dailyResult.rows.length;
+    
     res.json({
       week_start: summary.week_start,
       week_end: summary.week_end,
@@ -127,6 +129,11 @@ router.get('/weekly/:start_date', async (req: Request, res: Response): Promise<v
       total_protein: parseFloat(summary.total_protein || '0').toFixed(2),
       total_net_carbs: parseFloat(summary.total_net_carbs || '0').toFixed(2),
       total_fat: parseFloat(summary.total_fat || '0').toFixed(2),
+      day_count: dayCount,
+      avg_calories: dayCount > 0 ? (parseFloat(summary.total_calories || '0') / dayCount).toFixed(2) : '0',
+      avg_protein: dayCount > 0 ? (parseFloat(summary.total_protein || '0') / dayCount).toFixed(2) : '0',
+      avg_net_carbs: dayCount > 0 ? (parseFloat(summary.total_net_carbs || '0') / dayCount).toFixed(2) : '0',
+      avg_fat: dayCount > 0 ? (parseFloat(summary.total_fat || '0') / dayCount).toFixed(2) : '0',
       protein_percentage: totalCalories > 0 ? ((parseFloat(summary.total_protein) * 4) / totalCalories * 100).toFixed(1) : '0',
       carbs_percentage: totalCalories > 0 ? ((parseFloat(summary.total_net_carbs) * 4) / totalCalories * 100).toFixed(1) : '0',
       fat_percentage: totalCalories > 0 ? ((parseFloat(summary.total_fat) * 9) / totalCalories * 100).toFixed(1) : '0',
