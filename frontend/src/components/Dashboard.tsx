@@ -1,9 +1,9 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import { format, startOfWeek, addDays } from 'date-fns';
 import { logsAPI, analyticsAPI, foodsAPI, mealsAPI } from '../api';
-import { Food, Meal, FoodLog, DailySummary, WeeklySummary } from '../types';
-import ConfirmModal from './ConfirmModal';
+import { Food, Meal, FoodLog, DailySummary, WeeklySummary, CreateLogRequest } from '../types';
 import './Dashboard.css';
+import ConfirmModal from './ConfirmModal';
 
 const Dashboard: React.FC = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
@@ -62,17 +62,12 @@ const Dashboard: React.FC = () => {
 
   const handleAddLog = async (type: 'food' | 'meal', item: Food | Meal, servings: number) => {
     try {
-      const logData: any = {
+      const logData: CreateLogRequest = {
         log_date: format(currentDate, 'yyyy-MM-dd'),
         log_time: format(new Date(), 'HH:mm:ss'),
         servings: parseFloat(String(servings)) || 1,
+        ...(type === 'food' ? { food_id: item.id } : { meal_id: item.id }),
       };
-
-      if (type === 'food') {
-        logData.food_id = item.id;
-      } else {
-        logData.meal_id = item.id;
-      }
 
       await logsAPI.create(logData);
       await loadData();

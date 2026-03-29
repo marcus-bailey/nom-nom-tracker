@@ -1,23 +1,12 @@
 import express, { Request, Response } from 'express';
 import { pool } from '../db';
 import db from '../db';
-import { Meal, MealWithTotals, CreateMealRequest, UpdateMealRequest } from '../types';
+import { Meal, MealWithTotals, MealFoodDetail, CreateMealRequest, UpdateMealRequest } from '../types';
 
 const router = express.Router();
 
-interface MealFood {
-  food_id: number;
-  food_name: string;
-  servings: number;
-  calories: number;
-  protein_grams: number;
-  carbs_grams: number;
-  fiber_grams: number;
-  fat_grams: number;
-}
-
 interface MealQueryResult extends Meal {
-  foods: MealFood[] | null;
+  foods: MealFoodDetail[] | null;
 }
 
 const calculateMealTotals = (meal: MealQueryResult): MealWithTotals => {
@@ -47,7 +36,7 @@ const calculateMealTotals = (meal: MealQueryResult): MealWithTotals => {
   
   return {
     ...meal,
-    foods: foods as any,
+    foods: foods,
     totals: {
       // calories: totals.calories,
       calories: totalCalories,
@@ -133,7 +122,7 @@ router.get('/:id', async (req: Request, res: Response): Promise<void> => {
 });
 
 // Create new meal
-router.post('/', async (req: Request<{}, {}, CreateMealRequest>, res: Response): Promise<void> => {
+router.post('/', async (req: Request<Record<string, string>, unknown, CreateMealRequest>, res: Response): Promise<void> => {
   const client = await pool.connect();
   
   try {
@@ -197,7 +186,7 @@ router.post('/', async (req: Request<{}, {}, CreateMealRequest>, res: Response):
 });
 
 // Update meal
-router.put('/:id', async (req: Request<{ id: string }, {}, UpdateMealRequest>, res: Response): Promise<void> => {
+router.put('/:id', async (req: Request<{ id: string }, unknown, UpdateMealRequest>, res: Response): Promise<void> => {
   const client = await pool.connect();
   
   try {

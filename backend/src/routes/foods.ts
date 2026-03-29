@@ -4,6 +4,10 @@ import { Food, FoodWithCalculations, CreateFoodRequest, UpdateFoodRequest } from
 
 const router = express.Router();
 
+function hasCode(error: unknown): error is { code: string } {
+  return typeof error === 'object' && error !== null && 'code' in error;
+}
+
 // Helper function to calculate macro percentages
 const calculateMacros = (food: Food): FoodWithCalculations => {
   const netCarbs = food.carbs_grams - food.fiber_grams;
@@ -23,7 +27,7 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
   try {
     const { search } = req.query;
     let query = 'SELECT * FROM foods';
-    let params: string[] = [];
+    const params: string[] = [];
     
     if (search && typeof search === 'string') {
       query += ' WHERE name ILIKE $1';
@@ -62,7 +66,7 @@ router.get('/:id', async (req: Request, res: Response): Promise<void> => {
 });
 
 // Create new food
-router.post('/', async (req: Request<{}, {}, CreateFoodRequest>, res: Response): Promise<void> => {
+router.post('/', async (req: Request<Record<string, string>, unknown, CreateFoodRequest>, res: Response): Promise<void> => {
   try {
     const { name, calories, protein_grams, carbs_grams, fiber_grams, fat_grams, serving_size } = req.body;
     
@@ -79,9 +83,9 @@ router.post('/', async (req: Request<{}, {}, CreateFoodRequest>, res: Response):
     );
     
     res.status(201).json(result.rows[0]);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating food:', error);
-    if (error.code === '23505') { // Unique violation
+    if (hasCode(error) && error.code === '23505') { // Unique violation
       res.status(409).json({ error: 'A food with this name already exists' });
       return;
     }
@@ -90,7 +94,7 @@ router.post('/', async (req: Request<{}, {}, CreateFoodRequest>, res: Response):
 });
 
 // Update food
-router.put('/:id', async (req: Request<{ id: string }, {}, UpdateFoodRequest>, res: Response): Promise<void> => {
+router.put('/:id', async (req: Request<{ id: string }, unknown, UpdateFoodRequest>, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const { name, calories, protein_grams, carbs_grams, fiber_grams, fat_grams, serving_size } = req.body;
@@ -111,9 +115,9 @@ router.put('/:id', async (req: Request<{ id: string }, {}, UpdateFoodRequest>, r
     }
     
     res.json(result.rows[0]);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating food:', error);
-    if (error.code === '23505') {
+    if (hasCode(error) && error.code === '23505') {
       res.status(409).json({ error: 'A food with this name already exists' });
       return;
     }
