@@ -3,6 +3,40 @@
   margin: 0 auto;
 }
 
+.dashboard-columns {
+  display: flex;
+  gap: var(--dashboard-gap);
+  align-items: flex-start;
+}
+
+.dashboard-col-left {
+  flex: 3;
+  min-width: 0;
+}
+
+.dashboard-col-right {
+  flex: 1;
+  min-width: 0;
+  position: sticky;
+  top: var(--dashboard-sticky-offset);
+}
+
+@media (max-width: 56.25rem) {
+  .dashboard-columns {
+    flex-direction: column;
+  }
+
+  .dashboard-col-right {
+    position: static;
+  }
+
+  /* When the layout collapses to a single column, restore the default
+     stats grid behavior instead of forcing a single-column grid. */
+  .dashboard-col-right .stats-grid {
+    grid-template-columns: revert;
+  }
+}
+
 .date-navigation {
   display: flex;
   justify-content: space-between;
@@ -26,6 +60,12 @@
 .weekly-summary-card {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+}
+
+@media (min-width: 901px) {
+  .dashboard-col-right .weekly-summary-card .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .weekly-summary-card .card-header {
