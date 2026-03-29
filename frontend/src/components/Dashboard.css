@@ -29,6 +29,12 @@
   .dashboard-col-right {
     position: static;
   }
+
+  /* When the layout collapses to a single column, restore the default
+     stats grid behavior instead of forcing a single-column grid. */
+  .dashboard-col-right .stats-grid {
+    grid-template-columns: revert;
+  }
 }
 
 .date-navigation {
