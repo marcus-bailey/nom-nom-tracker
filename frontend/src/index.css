@@ -32,6 +32,9 @@
   --header-text: #ffffff;
   --nav-bg: #ffffff;
   --footer-bg: #333333;
+
+  --dashboard-gap: 1.5rem;
+  --dashboard-sticky-offset: 1.25rem;
 }
 
 /* Dark theme */
