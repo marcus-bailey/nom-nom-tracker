@@ -81,10 +81,14 @@ export interface WeeklySummary {
   total_protein: string;
   total_net_carbs: string;
   total_fat: string;
+  avg_calories: string;
+  avg_protein: string;
+  avg_net_carbs: string;
+  avg_fat: string;
   protein_percentage: string;
   carbs_percentage: string;
   fat_percentage: string;
-  day_count?: number;
+  day_count: number;
   daily_breakdown?: DailyBreakdown[];
 }
 
