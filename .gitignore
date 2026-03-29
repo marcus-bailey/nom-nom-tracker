@@ -39,3 +39,4 @@ yarn-error.log*
 docker-compose.override.yml
 
 backups/
+*.code-workspace
