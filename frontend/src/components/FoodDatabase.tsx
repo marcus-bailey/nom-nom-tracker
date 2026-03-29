@@ -1,4 +1,5 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import axios from 'axios';
 import { foodsAPI } from '../api';
 import { Food, CreateFoodRequest } from '../types';
 import ConfirmModal from './ConfirmModal';
@@ -251,9 +252,12 @@ const FoodFormModal: React.FC<FoodFormModalProps> = ({ food, onClose, onSuccess 
       }
 
       onSuccess();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error saving food:', err);
-      setError(err.response?.data?.error || 'Failed to save food. Please try again.');
+      const message = axios.isAxiosError(err)
+        ? err.response?.data?.error
+        : undefined;
+      setError(message || 'Failed to save food. Please try again.');
     } finally {
       setSubmitting(false);
     }

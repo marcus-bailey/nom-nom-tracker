@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import db from '../db';
-import { FoodLog, FoodLogWithDetails, CreateLogRequest, UpdateLogRequest, Food } from '../types';
+import { FoodLog, CreateLogRequest, UpdateLogRequest, Food } from '../types';
 
 const router = express.Router();
 
@@ -38,8 +38,8 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
       LEFT JOIN meals m ON l.meal_id = m.id
     `;
     
-    let params: string[] = [];
-    let conditions: string[] = [];
+    const params: string[] = [];
+    const conditions: string[] = [];
     
     if (date && typeof date === 'string') {
       conditions.push(`l.log_date = $${params.length + 1}`);
@@ -92,7 +92,7 @@ router.get('/:id', async (req: Request, res: Response): Promise<void> => {
 });
 
 // Create log entry
-router.post('/', async (req: Request<{}, {}, CreateLogRequest>, res: Response): Promise<void> => {
+router.post('/', async (req: Request<Record<string, string>, unknown, CreateLogRequest>, res: Response): Promise<void> => {
   try {
     const { log_date, log_time, food_id, meal_id, servings } = req.body;
     
@@ -174,7 +174,7 @@ router.post('/', async (req: Request<{}, {}, CreateLogRequest>, res: Response): 
 });
 
 // Update log entry
-router.put('/:id', async (req: Request<{ id: string }, {}, UpdateLogRequest>, res: Response): Promise<void> => {
+router.put('/:id', async (req: Request<{ id: string }, unknown, UpdateLogRequest>, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const { log_date, log_time, servings } = req.body;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import axios from 'axios';
 import { mealsAPI, foodsAPI } from '../api';
 import { Meal, Food, CreateMealRequest } from '../types';
 import ConfirmModal from './ConfirmModal';
@@ -41,7 +42,6 @@ const MealBuilder: React.FC = () => {
         mealsAPI.getAll(),
         foodsAPI.getAll(),
       ]);
-      console.log('loadData mealsRes:', mealsRes);
       setMeals(mealsRes.data);
       setFoods(foodsRes.data);
       setError(null);
@@ -109,7 +109,7 @@ const MealBuilder: React.FC = () => {
                 <div className="meal-foods">
                   <h4>Ingredients:</h4>
                   <ul>
-                    {meal.foods && meal.foods.map((food: any, index: number) => (
+                    {meal.foods && meal.foods.map((food, index) => (
                       <li key={index}>
                         {food.servings}x {food.food_name}
                       </li>
@@ -265,9 +265,12 @@ const MealFormModal: React.FC<MealFormModalProps> = ({ meal, foods, onClose, onS
       }
 
       onSuccess();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error saving meal:', err);
-      setError(err.response?.data?.error || 'Failed to save meal. Please try again.');
+      const message = axios.isAxiosError(err)
+        ? err.response?.data?.error
+        : undefined;
+      setError(message || 'Failed to save meal. Please try again.');
     } finally {
       setSubmitting(false);
     }

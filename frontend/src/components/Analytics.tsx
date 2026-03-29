@@ -1,4 +1,4 @@
-import React, { useState, useEffect, MouseEvent } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { format, subDays } from 'date-fns';
 import { 
   LineChart, 
@@ -46,11 +46,7 @@ const Analytics: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadData();
-  }, [timeRange]);
-
-  const loadData = async (): Promise<void> => {
+  const loadData = useCallback(async (): Promise<void> => {
     try {
       setLoading(true);
       const endDate = new Date();
@@ -83,7 +79,11 @@ const Analytics: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [timeRange]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   if (loading) {
     return <div className="loading">Loading analytics...</div>;
@@ -107,7 +107,7 @@ const Analytics: React.FC = () => {
   }
 
   // Prepare chart data
-  const dailyChartData: ChartDataPoint[] = data.daily_data.map((day: any) => ({
+  const dailyChartData: ChartDataPoint[] = data.daily_data.map((day) => ({
     date: format(new Date(day.date), 'MMM d'),
     calories: parseFloat(day.calories),
     protein: parseFloat(day.protein),
@@ -120,19 +120,19 @@ const Analytics: React.FC = () => {
     { 
       name: 'Protein', 
       value: parseFloat(
-        (data.daily_data.reduce((sum: number, day: any) => sum + parseFloat(day.protein_percentage), 0) / data.daily_data.length).toFixed(1)
+        (data.daily_data.reduce((sum: number, day) => sum + parseFloat(day.protein_percentage), 0) / data.daily_data.length).toFixed(1)
       ) 
     },
     { 
       name: 'Carbs', 
       value: parseFloat(
-        (data.daily_data.reduce((sum: number, day: any) => sum + parseFloat(day.carbs_percentage), 0) / data.daily_data.length).toFixed(1)
+        (data.daily_data.reduce((sum: number, day) => sum + parseFloat(day.carbs_percentage), 0) / data.daily_data.length).toFixed(1)
       ) 
     },
     { 
       name: 'Fat', 
       value: parseFloat(
-        (data.daily_data.reduce((sum: number, day: any) => sum + parseFloat(day.fat_percentage), 0) / data.daily_data.length).toFixed(1)
+        (data.daily_data.reduce((sum: number, day) => sum + parseFloat(day.fat_percentage), 0) / data.daily_data.length).toFixed(1)
       ) 
     },
   ];

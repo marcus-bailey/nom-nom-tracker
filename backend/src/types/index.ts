@@ -1,5 +1,3 @@
-import { QueryResult, QueryResultRow } from 'pg';
-
 // Database entities
 export interface Food {
   id: number;
@@ -35,8 +33,19 @@ export interface MealFood {
   servings: number;
 }
 
+export interface MealFoodDetail {
+  food_id: number;
+  food_name: string;
+  servings: number;
+  calories: number;
+  protein_grams: number;
+  carbs_grams: number;
+  fiber_grams: number;
+  fat_grams: number;
+}
+
 export interface MealWithTotals extends Meal {
-  foods?: FoodWithCalculations[];
+  foods?: MealFoodDetail[];
   totals?: {
     calories: number;
     protein_grams: number;
@@ -78,7 +87,7 @@ export interface CreateFoodRequest {
   fat_grams: number;
 }
 
-export interface UpdateFoodRequest extends Partial<CreateFoodRequest> {}
+export type UpdateFoodRequest = Partial<CreateFoodRequest>;
 
 export interface CreateMealRequest {
   name: string;
@@ -106,7 +115,7 @@ export interface CreateLogRequest {
   servings: number;
 }
 
-export interface UpdateLogRequest extends Partial<CreateLogRequest> {}
+export type UpdateLogRequest = Partial<CreateLogRequest>;
 
 // Analytics types
 export interface DailySummary {
@@ -141,6 +150,3 @@ export interface MacroTrend {
   net_carbs_grams: number;
   fat_grams: number;
 }
-
-// Database query helper types
-export interface DbQueryResult<T extends QueryResultRow> extends QueryResult<T> {}
