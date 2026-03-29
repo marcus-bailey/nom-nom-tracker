@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent } from 'react';
+import React, { useState, useEffect, useCallback, FormEvent } from 'react';
 import { format, startOfWeek, addDays } from 'date-fns';
 import { logsAPI, analyticsAPI, foodsAPI, mealsAPI } from '../api';
 import { Food, Meal, FoodLog, DailySummary, WeeklySummary, CreateLogRequest } from '../types';
@@ -19,15 +19,11 @@ const Dashboard: React.FC = () => {
 
   const weekStart = startOfWeek(currentDate, { weekStartsOn: 0 }); // Sunday
 
-  useEffect(() => {
-    loadData();
-  }, [currentDate]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const dateStr = format(currentDate, 'yyyy-MM-dd');
-      const weekStartStr = format(weekStart, 'yyyy-MM-dd');
+      const weekStartStr = format(startOfWeek(currentDate, { weekStartsOn: 0 }), 'yyyy-MM-dd');
       
       const [logsRes, dailyRes, weeklyRes] = await Promise.all([
         logsAPI.getAll({ date: dateStr }),
@@ -45,7 +41,11 @@ const Dashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentDate]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const loadFoodsAndMeals = async () => {
     try {
