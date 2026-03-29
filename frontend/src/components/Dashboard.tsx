@@ -114,54 +114,9 @@ const Dashboard: React.FC = () => {
 
       {error && <div className="error-message">{error}</div>}
 
-      {/* Weekly Summary Card */}
-      <div className="card weekly-summary-card">
-        <div className="card-header">
-          <h3>Week Summary ({format(weekStart, 'MMM d')} - {format(addDays(weekStart, 6), 'MMM d, yyyy')})</h3>
-        </div>
-        {weeklySummary && (
-          <>
-            <div className="stats-grid">
-              <div className="stat-card">
-                <h3>Weekly Calories</h3>
-                <div className="value">{parseFloat(weeklySummary.total_calories).toFixed(0)}</div>
-              </div>
-              <div className="stat-card">
-                <h3>Protein</h3>
-                <div className="value">{parseFloat(weeklySummary.total_protein).toFixed(0)}g</div>
-                <div className="label">{weeklySummary.protein_percentage}%</div>
-              </div>
-              <div className="stat-card">
-                <h3>Net Carbs</h3>
-                <div className="value">{parseFloat(weeklySummary.total_net_carbs).toFixed(0)}g</div>
-                <div className="label">{weeklySummary.carbs_percentage}%</div>
-              </div>
-              <div className="stat-card">
-                <h3>Fat</h3>
-                <div className="value">{parseFloat(weeklySummary.total_fat).toFixed(0)}g</div>
-                <div className="label">{weeklySummary.fat_percentage}%</div>
-              </div>
-            </div>
-            <div className="macro-bar">
-              <div 
-                className="protein" 
-                style={{ width: `${weeklySummary.protein_percentage}%` }}
-                title={`Protein: ${weeklySummary.protein_percentage}%`}
-              />
-              <div 
-                className="carbs" 
-                style={{ width: `${weeklySummary.carbs_percentage}%` }}
-                title={`Carbs: ${weeklySummary.carbs_percentage}%`}
-              />
-              <div 
-                className="fat" 
-                style={{ width: `${weeklySummary.fat_percentage}%` }}
-                title={`Fat: ${weeklySummary.fat_percentage}%`}
-              />
-            </div>
-          </>
-        )}
-      </div>
+      <div className="dashboard-columns">
+        {/* Left Column: Daily Summary + Food Log */}
+        <div className="dashboard-col-left">
 
       {/* Daily Summary */}
       <div className="card">
@@ -269,6 +224,60 @@ const Dashboard: React.FC = () => {
             </tbody>
           </table>
         )}
+      </div>
+
+        </div>
+
+        {/* Right Column: Weekly Summary */}
+        <div className="dashboard-col-right">
+          <div className="card weekly-summary-card">
+            <div className="card-header">
+              <h3>Week Summary ({format(weekStart, 'MMM d')} - {format(addDays(weekStart, 6), 'MMM d, yyyy')})</h3>
+            </div>
+            {weeklySummary && (
+              <>
+                <div className="stats-grid">
+                  <div className="stat-card">
+                    <h3>Weekly Calories</h3>
+                    <div className="value">{parseFloat(weeklySummary.total_calories).toFixed(0)}</div>
+                  </div>
+                  <div className="stat-card">
+                    <h3>Protein</h3>
+                    <div className="value">{parseFloat(weeklySummary.total_protein).toFixed(0)}g</div>
+                    <div className="label">{weeklySummary.protein_percentage}%</div>
+                  </div>
+                  <div className="stat-card">
+                    <h3>Net Carbs</h3>
+                    <div className="value">{parseFloat(weeklySummary.total_net_carbs).toFixed(0)}g</div>
+                    <div className="label">{weeklySummary.carbs_percentage}%</div>
+                  </div>
+                  <div className="stat-card">
+                    <h3>Fat</h3>
+                    <div className="value">{parseFloat(weeklySummary.total_fat).toFixed(0)}g</div>
+                    <div className="label">{weeklySummary.fat_percentage}%</div>
+                  </div>
+                </div>
+                <div className="macro-bar">
+                  <div 
+                    className="protein" 
+                    style={{ width: `${weeklySummary.protein_percentage}%` }}
+                    title={`Protein: ${weeklySummary.protein_percentage}%`}
+                  />
+                  <div 
+                    className="carbs" 
+                    style={{ width: `${weeklySummary.carbs_percentage}%` }}
+                    title={`Carbs: ${weeklySummary.carbs_percentage}%`}
+                  />
+                  <div 
+                    className="fat" 
+                    style={{ width: `${weeklySummary.fat_percentage}%` }}
+                    title={`Fat: ${weeklySummary.fat_percentage}%`}
+                  />
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Add Entry Modal */}

@@ -3,6 +3,34 @@
   margin: 0 auto;
 }
 
+.dashboard-columns {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.dashboard-col-left {
+  flex: 3;
+  min-width: 0;
+}
+
+.dashboard-col-right {
+  flex: 1;
+  min-width: 0;
+  position: sticky;
+  top: 20px;
+}
+
+@media (max-width: 900px) {
+  .dashboard-columns {
+    flex-direction: column;
+  }
+
+  .dashboard-col-right {
+    position: static;
+  }
+}
+
 .date-navigation {
   display: flex;
   justify-content: space-between;
@@ -26,6 +54,10 @@
 .weekly-summary-card {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+}
+
+.dashboard-col-right .weekly-summary-card .stats-grid {
+  grid-template-columns: 1fr;
 }
 
 .weekly-summary-card .card-header {
