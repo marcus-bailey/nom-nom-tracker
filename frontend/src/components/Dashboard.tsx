@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, FormEvent } from 'react';
 import { format, startOfWeek, addDays } from 'date-fns';
 import { logsAPI, analyticsAPI, foodsAPI, mealsAPI } from '../api';
 import { Food, Meal, FoodLog, DailySummary, WeeklySummary, CreateLogRequest } from '../types';
+import MacroLabels from './MacroLabels';
+import { MacroLabel, getMacroLabelsFromGrams, getMacroLabelsFromPercentages } from '../utils/macroLabels';
 import './Dashboard.css';
 import ConfirmModal from './ConfirmModal';
 
@@ -198,8 +200,18 @@ const Dashboard: React.FC = () => {
                 <tr key={log.id}>
                   <td>{log.log_time.substring(0, 5)}</td>
                   <td>
-                    {log.food_name || log.meal_name}
-                    {log.meal_id && <span className="meal-badge">MEAL</span>}
+                    <div className="log-item-name-row">
+                      {log.food_name || log.meal_name}
+                      {log.meal_id && <span className="meal-badge">MEAL</span>}
+                    </div>
+                    <MacroLabels
+                      labels={getMacroLabelsFromGrams(
+                        parseFloat(String(log.protein_grams)),
+                        parseFloat(String(log.net_carbs_grams)),
+                        parseFloat(String(log.fat_grams))
+                      )}
+                      className="log-item-labels"
+                    />
                   </td>
                   <td>{log.servings}</td>
                   <td>{parseFloat(String(log.calories)).toFixed(0)}</td>
@@ -309,6 +321,22 @@ interface AddEntryModalProps {
   onClose: () => void;
 }
 
+const getEntryMacroLabels = (entry: CombinedEntry): MacroLabel[] => {
+  if (entry.type === 'food') {
+    return getMacroLabelsFromPercentages({
+      protein: entry.item.protein_percentage,
+      carbs: entry.item.carbs_percentage,
+      fat: entry.item.fat_percentage,
+    });
+  }
+
+  return getMacroLabelsFromPercentages({
+    protein: entry.item.totals?.protein_percentage,
+    carbs: entry.item.totals?.carbs_percentage,
+    fat: entry.item.totals?.fat_percentage,
+  });
+};
+
 const AddEntryModal: React.FC<AddEntryModalProps> = ({ foods, meals, onAdd, onClose }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedEntry, setSelectedEntry] = useState<CombinedEntry | null>(null);
@@ -373,6 +401,10 @@ const AddEntryModal: React.FC<AddEntryModalProps> = ({ foods, meals, onAdd, onCl
                       {entry.type === 'food' ? 'Food' : 'Meal'}
                     </span>
                   </div>
+                  <MacroLabels
+                    labels={getEntryMacroLabels(entry)}
+                    className="item-macro-labels"
+                  />
                   <div className="item-stats">
                     {entry.type === 'food' ? (
                       <>

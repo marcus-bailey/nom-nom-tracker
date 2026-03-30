@@ -47,6 +47,15 @@
   flex: 1;
 }
 
+.food-header-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.food-macro-labels {
+  margin-top: 8px;
+}
+
 .protein-badge {
   background: #4CAF50;
   padding: 4px 4px 0px 4px;

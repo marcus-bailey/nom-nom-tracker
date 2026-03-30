@@ -3,6 +3,8 @@ import axios from 'axios';
 import { foodsAPI } from '../api';
 import { Food, CreateFoodRequest } from '../types';
 import ConfirmModal from './ConfirmModal';
+import MacroLabels from './MacroLabels';
+import { getMacroLabelsFromPercentages } from '../utils/macroLabels';
 import './FoodDatabase.css';
 
 interface FoodFormModalProps {
@@ -105,8 +107,18 @@ const FoodDatabase: React.FC = () => {
           {filteredFoods.map((food: Food) => (
             <div key={food.id} className="food-card">
               <div className="food-header">
-                <h3>{food.name}</h3>
-                {food.is_custom && <span className="custom-badge">Custom</span>}
+                  <div className="food-header-main">
+                    <h3>{food.name}</h3>
+                    <MacroLabels
+                      labels={getMacroLabelsFromPercentages({
+                        protein: food.protein_percentage,
+                        carbs: food.carbs_percentage,
+                        fat: food.fat_percentage,
+                      })}
+                      className="food-macro-labels"
+                    />
+                  </div>
+                  {food.is_custom && <span className="custom-badge">Custom</span>}
               </div>
               
               <div className="food-details">

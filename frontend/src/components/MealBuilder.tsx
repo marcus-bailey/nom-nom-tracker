@@ -3,6 +3,8 @@ import axios from 'axios';
 import { mealsAPI, foodsAPI } from '../api';
 import { Meal, Food, CreateMealRequest } from '../types';
 import ConfirmModal from './ConfirmModal';
+import MacroLabels from './MacroLabels';
+import { getMacroLabelsFromPercentages } from '../utils/macroLabels';
 import './MealBuilder.css';
 
 interface MealFormModalProps {
@@ -70,6 +72,20 @@ const MealBuilder: React.FC = () => {
     setShowAddModal(true);
   };
 
+  const getFoodLabelsById = (foodId: number) => {
+    const food = foods.find((item: Food) => item.id === foodId);
+
+    if (!food) {
+      return [];
+    }
+
+    return getMacroLabelsFromPercentages({
+      protein: food.protein_percentage,
+      carbs: food.carbs_percentage,
+      fat: food.fat_percentage,
+    });
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -101,6 +117,19 @@ const MealBuilder: React.FC = () => {
                 <div className="meal-header">
                   <h3>{meal.name}</h3>
                 </div>
+
+                <MacroLabels
+                  labels={
+                    meal.totals
+                      ? getMacroLabelsFromPercentages({
+                          protein: meal.totals.protein_percentage,
+                          carbs: meal.totals.carbs_percentage,
+                          fat: meal.totals.fat_percentage,
+                        })
+                      : []
+                  }
+                  className="meal-macro-labels"
+                />
                 
                 {meal.description && (
                   <p className="meal-description">{meal.description}</p>
@@ -111,7 +140,11 @@ const MealBuilder: React.FC = () => {
                   <ul>
                     {meal.foods && meal.foods.map((food, index) => (
                       <li key={index}>
-                        {food.servings}x {food.food_name}
+                          <div className="meal-ingredient-name">{food.servings}x {food.food_name}</div>
+                          <MacroLabels
+                            labels={getFoodLabelsById(food.food_id)}
+                            className="meal-ingredient-labels"
+                          />
                       </li>
                     ))}
                   </ul>
@@ -375,6 +408,14 @@ const MealFormModal: React.FC<MealFormModalProps> = ({ meal, foods, onClose, onS
                     <div key={sf.food_id} className="selected-food-item">
                       <div className="food-info">
                         <span className="food-name">{food.name}</span>
+                        <MacroLabels
+                          labels={getMacroLabelsFromPercentages({
+                            protein: food.protein_percentage,
+                            carbs: food.carbs_percentage,
+                            fat: food.fat_percentage,
+                          })}
+                          className="food-macro-labels"
+                        />
                         <span className="food-stats">
                           {food.serving_size} {food.serving_size ? '|' : ''} {adjustedCalories} cal | P: {adjustedProtein}g | C: {adjustedNetCarbs}g | F: {adjustedFat}g
                         </span>
@@ -461,6 +502,14 @@ const MealFormModal: React.FC<MealFormModalProps> = ({ meal, foods, onClose, onS
                 <div key={food.id} className="food-search-item">
                   <div className="food-info">
                     <span className="food-name">{food.name}</span>
+                    <MacroLabels
+                      labels={getMacroLabelsFromPercentages({
+                        protein: food.protein_percentage,
+                        carbs: food.carbs_percentage,
+                        fat: food.fat_percentage,
+                      })}
+                      className="food-macro-labels"
+                    />
                     <span className="food-stats">
                       {food.calories} cal | P: {food.protein_grams}g | C: {(food.carbs_grams - food.fiber_grams).toFixed(1)}g | F: {food.fat_grams}g
                     </span>

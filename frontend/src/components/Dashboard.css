@@ -111,6 +111,15 @@
   margin-left: 8px;
 }
 
+.log-item-name-row {
+  display: flex;
+  align-items: center;
+}
+
+.log-item-labels {
+  margin-top: 4px;
+}
+
 .items-list {
   max-height: 300px;
   overflow-y: auto;
@@ -184,6 +193,10 @@
 .item-stats {
   font-size: 13px;
   color: var(--text);
+}
+
+.item-macro-labels {
+  margin-bottom: 8px;
 }
 
 table button {
