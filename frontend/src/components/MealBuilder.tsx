@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import React, { useState, useEffect, useMemo, FormEvent, ChangeEvent } from 'react';
 import axios from 'axios';
 import { mealsAPI, foodsAPI } from '../api';
 import { Meal, Food, CreateMealRequest } from '../types';
@@ -73,8 +73,13 @@ const MealBuilder: React.FC = () => {
     setShowAddModal(true);
   };
 
+  const foodsById = useMemo(
+    () => new Map(foods.map((food) => [food.id, food])),
+    [foods]
+  );
+
   const getFoodLabelsById = (foodId: number) => {
-    const food = foods.find((item: Food) => item.id === foodId);
+    const food = foodsById.get(foodId);
 
     if (!food) {
       return [];
@@ -325,7 +330,12 @@ const MealFormModal: React.FC<MealFormModalProps> = ({ meal, foods, onClose, onS
     !selectedFoods.find((sf: SelectedFood) => sf.food_id === food.id)
   );
 
-  const getFoodById = (id: number): Food | undefined => foods.find(f => f.id === id);
+  const foodsById = useMemo(
+    () => new Map(foods.map((food) => [food.id, food])),
+    [foods]
+  );
+
+  const getFoodById = (id: number): Food | undefined => foodsById.get(id);
 
   // Calculate meal totals
   const calculateMealTotals = () => {
