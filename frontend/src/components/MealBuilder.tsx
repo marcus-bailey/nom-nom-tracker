@@ -171,24 +171,28 @@ const MealBuilder: React.FC = () => {
                       titleClassName="meal-macro-label"
                       valueClassName="meal-macro-value"
                       percentageClassName="meal-macro-percent"
+                      showTitleBadges
                       metrics={[
                         {
                           key: 'protein',
                           title: 'Protein',
                           value: `${parseFloat(meal.totals.protein_grams.toString()).toFixed(1)}g`,
                           percentage: meal.totals.protein_percentage,
+                          badgeClassName: 'protein-badge',
                         },
                         {
                           key: 'carbs',
                           title: 'Net Carbs',
                           value: `${parseFloat(meal.totals.net_carbs_grams.toString()).toFixed(1)}g`,
                           percentage: meal.totals.carbs_percentage,
+                          badgeClassName: 'carb-badge',
                         },
                         {
                           key: 'fat',
                           title: 'Fat',
                           value: `${parseFloat(meal.totals.fat_grams.toString()).toFixed(1)}g`,
                           percentage: meal.totals.fat_percentage,
+                          badgeClassName: 'fat-badge',
                         },
                       ]}
                     />
@@ -479,24 +483,28 @@ const MealFormModal: React.FC<MealFormModalProps> = ({ meal, foods, onClose, onS
                 titleClassName="macro-label"
                 valueClassName="macro-value"
                 percentageClassName="macro-percent"
+                showTitleBadges
                 metrics={[
                   {
                     key: 'protein',
                     title: 'Protein',
                     value: `${mealTotals.protein.toFixed(1)}g`,
                     percentage: mealTotals.proteinPercentage,
+                    badgeClassName: 'protein-badge',
                   },
                   {
                     key: 'carbs',
                     title: 'Net Carbs',
                     value: `${mealTotals.netCarbs.toFixed(1)}g`,
                     percentage: mealTotals.carbsPercentage,
+                    badgeClassName: 'carb-badge',
                   },
                   {
                     key: 'fat',
                     title: 'Fat',
                     value: `${mealTotals.fat.toFixed(1)}g`,
                     percentage: mealTotals.fatPercentage,
+                    badgeClassName: 'fat-badge',
                   },
                 ]}
               />
