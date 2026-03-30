@@ -106,6 +106,27 @@
   letter-spacing: 0.5px;
 }
 
+.meal-builder .protein-badge {
+  background: #4CAF50;
+  padding: 4px 4px 0px 4px;
+  border-radius: 8px;
+  font-size: 3px;
+}
+
+.meal-builder .fat-badge {
+  background: #FF9800;
+  padding: 4px 4px 0px 4px;
+  border-radius: 8px;
+  font-size: 3px;
+}
+
+.meal-builder .carb-badge {
+  background: #2196F3;
+  padding: 4px 4px 0px 4px;
+  border-radius: 8px;
+  font-size: 3px;
+}
+
 .meal-macro-value {
   font-size: 16px;
   font-weight: bold;
@@ -196,7 +217,7 @@
   color: var(--secondary-text);
 }
 
-.food-macro-labels {
+.meal-builder .food-macro-labels {
   margin-top: 2px;
 }
 
