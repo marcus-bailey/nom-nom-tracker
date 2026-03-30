@@ -1,0 +1,37 @@
+.macro-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.macro-label-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.macro-label-pill--high-protein {
+  background: rgba(76, 175, 80, 0.15);
+  color: #2e7d32;
+}
+
+.macro-label-pill--high-fat {
+  background: rgba(255, 152, 0, 0.16);
+  color: #ef6c00;
+}
+
+.macro-label-pill--low-carb {
+  background: rgba(33, 150, 243, 0.14);
+  color: #1565c0;
+}
+
+.macro-label-pill--balanced {
+  background: rgba(156, 39, 176, 0.14);
+  color: #6a1b9a;
+}

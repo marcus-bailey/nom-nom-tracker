@@ -2,6 +2,9 @@ import React, { useState, useEffect, useCallback, FormEvent } from 'react';
 import { format, startOfWeek, addDays } from 'date-fns';
 import { logsAPI, analyticsAPI, foodsAPI, mealsAPI } from '../api';
 import { Food, Meal, FoodLog, DailySummary, WeeklySummary, CreateLogRequest } from '../types';
+import MacroLabels from './MacroLabels';
+import MacroMetrics from './MacroMetrics';
+import { MacroLabel, getMacroLabelsFromGrams, getMacroLabelsFromPercentages } from '../utils/macroLabels';
 import './Dashboard.css';
 import ConfirmModal from './ConfirmModal';
 
@@ -125,21 +128,32 @@ const Dashboard: React.FC = () => {
                 <h3>Total Calories</h3>
                 <div className="value">{parseFloat(dailySummary.total_calories).toFixed(0)}</div>
               </div>
-              <div className="stat-card">
-                <h3>Protein</h3>
-                <div className="value">{parseFloat(dailySummary.total_protein).toFixed(0)}g</div>
-                <div className="label">{dailySummary.protein_percentage}%</div>
-              </div>
-              <div className="stat-card">
-                <h3>Net Carbs</h3>
-                <div className="value">{parseFloat(dailySummary.total_net_carbs).toFixed(0)}g</div>
-                <div className="label">{dailySummary.carbs_percentage}%</div>
-              </div>
-              <div className="stat-card">
-                <h3>Fat</h3>
-                <div className="value">{parseFloat(dailySummary.total_fat).toFixed(0)}g</div>
-                <div className="label">{dailySummary.fat_percentage}%</div>
-              </div>
+              <MacroMetrics
+                itemClassName="stat-card"
+                titleTag="h3"
+                valueClassName="value"
+                percentageClassName="label"
+                metrics={[
+                  {
+                    key: 'protein',
+                    title: 'Protein',
+                    value: `${parseFloat(dailySummary.total_protein).toFixed(0)}g`,
+                    percentage: dailySummary.protein_percentage,
+                  },
+                  {
+                    key: 'carbs',
+                    title: 'Net Carbs',
+                    value: `${parseFloat(dailySummary.total_net_carbs).toFixed(0)}g`,
+                    percentage: dailySummary.carbs_percentage,
+                  },
+                  {
+                    key: 'fat',
+                    title: 'Fat',
+                    value: `${parseFloat(dailySummary.total_fat).toFixed(0)}g`,
+                    percentage: dailySummary.fat_percentage,
+                  },
+                ]}
+              />
             </div>
             <div className="macro-bar">
               <div 
@@ -198,8 +212,18 @@ const Dashboard: React.FC = () => {
                 <tr key={log.id}>
                   <td>{log.log_time.substring(0, 5)}</td>
                   <td>
-                    {log.food_name || log.meal_name}
-                    {log.meal_id && <span className="meal-badge">MEAL</span>}
+                    <div className="log-item-name-row">
+                      {log.food_name || log.meal_name}
+                      {log.meal_id && <span className="meal-badge">MEAL</span>}
+                    </div>
+                    <MacroLabels
+                      labels={getMacroLabelsFromGrams(
+                        parseFloat(String(log.protein_grams)),
+                        parseFloat(String(log.net_carbs_grams)),
+                        parseFloat(String(log.fat_grams))
+                      )}
+                      className="log-item-labels"
+                    />
                   </td>
                   <td>{log.servings}</td>
                   <td>{parseFloat(String(log.calories)).toFixed(0)}</td>
@@ -237,21 +261,32 @@ const Dashboard: React.FC = () => {
                     <div className="value">{parseFloat(weeklySummary.avg_calories).toFixed(0)}</div>
                     <div className="label">{weeklySummary.day_count} day{weeklySummary.day_count !== 1 ? 's' : ''} logged</div>
                   </div>
-                  <div className="stat-card">
-                    <h3>Avg Protein</h3>
-                    <div className="value">{parseFloat(weeklySummary.avg_protein).toFixed(0)}g</div>
-                    <div className="label">{weeklySummary.protein_percentage}%</div>
-                  </div>
-                  <div className="stat-card">
-                    <h3>Avg Net Carbs</h3>
-                    <div className="value">{parseFloat(weeklySummary.avg_net_carbs).toFixed(0)}g</div>
-                    <div className="label">{weeklySummary.carbs_percentage}%</div>
-                  </div>
-                  <div className="stat-card">
-                    <h3>Avg Fat</h3>
-                    <div className="value">{parseFloat(weeklySummary.avg_fat).toFixed(0)}g</div>
-                    <div className="label">{weeklySummary.fat_percentage}%</div>
-                  </div>
+                  <MacroMetrics
+                    itemClassName="stat-card"
+                    titleTag="h3"
+                    valueClassName="value"
+                    percentageClassName="label"
+                    metrics={[
+                      {
+                        key: 'protein',
+                        title: 'Avg Protein',
+                        value: `${parseFloat(weeklySummary.avg_protein).toFixed(0)}g`,
+                        percentage: weeklySummary.protein_percentage,
+                      },
+                      {
+                        key: 'carbs',
+                        title: 'Avg Net Carbs',
+                        value: `${parseFloat(weeklySummary.avg_net_carbs).toFixed(0)}g`,
+                        percentage: weeklySummary.carbs_percentage,
+                      },
+                      {
+                        key: 'fat',
+                        title: 'Avg Fat',
+                        value: `${parseFloat(weeklySummary.avg_fat).toFixed(0)}g`,
+                        percentage: weeklySummary.fat_percentage,
+                      },
+                    ]}
+                  />
                 </div>
                 <div className="macro-bar">
                   <div 
@@ -309,6 +344,22 @@ interface AddEntryModalProps {
   onAdd: (type: 'food' | 'meal', item: Food | Meal, servings: number) => void;
   onClose: () => void;
 }
+
+const getEntryMacroLabels = (entry: CombinedEntry): MacroLabel[] => {
+  if (entry.type === 'food') {
+    return getMacroLabelsFromPercentages({
+      protein: entry.item.protein_percentage,
+      carbs: entry.item.carbs_percentage,
+      fat: entry.item.fat_percentage,
+    });
+  }
+
+  return getMacroLabelsFromPercentages({
+    protein: entry.item.totals?.protein_percentage,
+    carbs: entry.item.totals?.carbs_percentage,
+    fat: entry.item.totals?.fat_percentage,
+  });
+};
 
 const AddEntryModal: React.FC<AddEntryModalProps> = ({ foods, meals, onAdd, onClose }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -374,6 +425,10 @@ const AddEntryModal: React.FC<AddEntryModalProps> = ({ foods, meals, onAdd, onCl
                       {entry.type === 'food' ? 'Food' : 'Meal'}
                     </span>
                   </div>
+                  <MacroLabels
+                    labels={getEntryMacroLabels(entry)}
+                    className="item-macro-labels"
+                  />
                   <div className="item-stats">
                     {entry.type === 'food' ? (
                       <>

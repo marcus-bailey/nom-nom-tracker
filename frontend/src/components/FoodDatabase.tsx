@@ -3,6 +3,9 @@ import axios from 'axios';
 import { foodsAPI } from '../api';
 import { Food, CreateFoodRequest } from '../types';
 import ConfirmModal from './ConfirmModal';
+import MacroLabels from './MacroLabels';
+import MacroMetrics from './MacroMetrics';
+import { getMacroLabelsFromPercentages } from '../utils/macroLabels';
 import './FoodDatabase.css';
 
 interface FoodFormModalProps {
@@ -105,8 +108,18 @@ const FoodDatabase: React.FC = () => {
           {filteredFoods.map((food: Food) => (
             <div key={food.id} className="food-card">
               <div className="food-header">
-                <h3>{food.name}</h3>
-                {food.is_custom && <span className="custom-badge">Custom</span>}
+                  <div className="food-header-main">
+                    <h3>{food.name}</h3>
+                    <MacroLabels
+                      labels={getMacroLabelsFromPercentages({
+                        protein: food.protein_percentage,
+                        carbs: food.carbs_percentage,
+                        fat: food.fat_percentage,
+                      })}
+                      className="food-macro-labels"
+                    />
+                  </div>
+                  {food.is_custom && <span className="custom-badge">Custom</span>}
               </div>
               
               <div className="food-details">
@@ -119,23 +132,37 @@ const FoodDatabase: React.FC = () => {
                   <span className="value">{food.calories}</span>
                 </div>
                 
-                <div className="macros-grid">
-                  <div className="macro">
-                    <div className="macro-label"><span className="protein-badge" style={{ marginRight: '5px' }}></span>Protein</div>
-                    <div className="macro-value">{food.protein_grams}g</div>
-                    <div className="macro-percent">{food.protein_percentage}%</div>
-                  </div>
-                  <div className="macro">
-                    <div className="macro-label"><span className="carb-badge" style={{ marginRight: '5px' }}></span>Net Carbs</div>
-                    <div className="macro-value">{(food.net_carbs_grams || 0).toFixed(1)}g</div>
-                    <div className="macro-percent">{food.carbs_percentage}%</div>
-                  </div>
-                  <div className="macro">
-                    <div className="macro-label"><span className="fat-badge" style={{ marginRight: '5px' }}></span>Fat</div>
-                    <div className="macro-value">{food.fat_grams}g</div>
-                    <div className="macro-percent">{food.fat_percentage}%</div>
-                  </div>
-                </div>
+                <MacroMetrics
+                  containerClassName="food-macros-grid"
+                  itemClassName="food-macro-card"
+                  titleClassName="food-macro-label"
+                  valueClassName="food-macro-value"
+                  percentageClassName="food-macro-percent"
+                  showTitleBadges
+                  metrics={[
+                    {
+                      key: 'protein',
+                      title: 'Protein',
+                      value: `${food.protein_grams}g`,
+                      percentage: food.protein_percentage,
+                      badgeClassName: 'protein-badge',
+                    },
+                    {
+                      key: 'carbs',
+                      title: 'Net Carbs',
+                      value: `${(food.net_carbs_grams || 0).toFixed(1)}g`,
+                      percentage: food.carbs_percentage,
+                      badgeClassName: 'carb-badge',
+                    },
+                    {
+                      key: 'fat',
+                      title: 'Fat',
+                      value: `${food.fat_grams}g`,
+                      percentage: food.fat_percentage,
+                      badgeClassName: 'fat-badge',
+                    },
+                  ]}
+                />
 
                 <div className="macro-bar">
                   <div 

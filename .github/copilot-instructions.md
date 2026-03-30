@@ -24,7 +24,7 @@
    - Ensure the following checklist is complete before submission:
      - [ ] Code has been tested using `npm run test` from the root of the project
      - [ ] Code has been linted using `npm run lint` from the root of the project
-   - Submit new PRs/MRs using the `glab` cli tool.
+   - Submit new PRs/MRs using the `gh` cli tool.
 
 <!-- # EDITING INSTRUCTIONS -->
 <!-- ## MANDATORY PLANNING PHASE -->

@@ -3,6 +3,9 @@ import axios from 'axios';
 import { mealsAPI, foodsAPI } from '../api';
 import { Meal, Food, CreateMealRequest } from '../types';
 import ConfirmModal from './ConfirmModal';
+import MacroLabels from './MacroLabels';
+import MacroMetrics from './MacroMetrics';
+import { getMacroLabelsFromPercentages } from '../utils/macroLabels';
 import './MealBuilder.css';
 
 interface MealFormModalProps {
@@ -70,6 +73,20 @@ const MealBuilder: React.FC = () => {
     setShowAddModal(true);
   };
 
+  const getFoodLabelsById = (foodId: number) => {
+    const food = foods.find((item: Food) => item.id === foodId);
+
+    if (!food) {
+      return [];
+    }
+
+    return getMacroLabelsFromPercentages({
+      protein: food.protein_percentage,
+      carbs: food.carbs_percentage,
+      fat: food.fat_percentage,
+    });
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -101,6 +118,19 @@ const MealBuilder: React.FC = () => {
                 <div className="meal-header">
                   <h3>{meal.name}</h3>
                 </div>
+
+                <MacroLabels
+                  labels={
+                    meal.totals
+                      ? getMacroLabelsFromPercentages({
+                          protein: meal.totals.protein_percentage,
+                          carbs: meal.totals.carbs_percentage,
+                          fat: meal.totals.fat_percentage,
+                        })
+                      : []
+                  }
+                  className="meal-macro-labels"
+                />
                 
                 {meal.description && (
                   <p className="meal-description">{meal.description}</p>
@@ -111,7 +141,11 @@ const MealBuilder: React.FC = () => {
                   <ul>
                     {meal.foods && meal.foods.map((food, index) => (
                       <li key={index}>
-                        {food.servings}x {food.food_name}
+                          <div className="meal-ingredient-name">{food.servings}x {food.food_name}</div>
+                          <MacroLabels
+                            labels={getFoodLabelsById(food.food_id)}
+                            className="meal-ingredient-labels"
+                          />
                       </li>
                     ))}
                   </ul>
@@ -126,23 +160,33 @@ const MealBuilder: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="macros-grid">
-                      <div className="macro">
-                        <div className="macro-label">Protein</div>
-                        <div className="macro-value">{parseFloat(meal.totals.protein_grams.toString()).toFixed(1)}g</div>
-                        <div className="macro-percent">{meal.totals.protein_percentage}%</div>
-                      </div>
-                      <div className="macro">
-                        <div className="macro-label">Net Carbs</div>
-                        <div className="macro-value">{parseFloat(meal.totals.net_carbs_grams.toString()).toFixed(1)}g</div>
-                        <div className="macro-percent">{meal.totals.carbs_percentage}%</div>
-                      </div>
-                      <div className="macro">
-                        <div className="macro-label">Fat</div>
-                        <div className="macro-value">{parseFloat(meal.totals.fat_grams.toString()).toFixed(1)}g</div>
-                        <div className="macro-percent">{meal.totals.fat_percentage}%</div>
-                      </div>
-                    </div>
+                    <MacroMetrics
+                      containerClassName="meal-macros-grid"
+                      itemClassName="meal-macro-card"
+                      titleClassName="meal-macro-label"
+                      valueClassName="meal-macro-value"
+                      percentageClassName="meal-macro-percent"
+                      metrics={[
+                        {
+                          key: 'protein',
+                          title: 'Protein',
+                          value: `${parseFloat(meal.totals.protein_grams.toString()).toFixed(1)}g`,
+                          percentage: meal.totals.protein_percentage,
+                        },
+                        {
+                          key: 'carbs',
+                          title: 'Net Carbs',
+                          value: `${parseFloat(meal.totals.net_carbs_grams.toString()).toFixed(1)}g`,
+                          percentage: meal.totals.carbs_percentage,
+                        },
+                        {
+                          key: 'fat',
+                          title: 'Fat',
+                          value: `${parseFloat(meal.totals.fat_grams.toString()).toFixed(1)}g`,
+                          percentage: meal.totals.fat_percentage,
+                        },
+                      ]}
+                    />
 
                     <div className="macro-bar">
                       <div 
@@ -375,6 +419,14 @@ const MealFormModal: React.FC<MealFormModalProps> = ({ meal, foods, onClose, onS
                     <div key={sf.food_id} className="selected-food-item">
                       <div className="food-info">
                         <span className="food-name">{food.name}</span>
+                        <MacroLabels
+                          labels={getMacroLabelsFromPercentages({
+                            protein: food.protein_percentage,
+                            carbs: food.carbs_percentage,
+                            fat: food.fat_percentage,
+                          })}
+                          className="food-macro-labels"
+                        />
                         <span className="food-stats">
                           {food.serving_size} {food.serving_size ? '|' : ''} {adjustedCalories} cal | P: {adjustedProtein}g | C: {adjustedNetCarbs}g | F: {adjustedFat}g
                         </span>
@@ -411,23 +463,33 @@ const MealFormModal: React.FC<MealFormModalProps> = ({ meal, foods, onClose, onS
                 <span className="label">Total Calories:</span>
                 <span className="value">{mealTotals.calories.toFixed(0)}</span>
               </div>
-              <div className="totals-macros">
-                <div className="macro">
-                  <div className="macro-label">Protein</div>
-                  <div className="macro-value">{mealTotals.protein.toFixed(1)}g</div>
-                  <div className="macro-percent">{mealTotals.proteinPercentage}%</div>
-                </div>
-                <div className="macro">
-                  <div className="macro-label">Net Carbs</div>
-                  <div className="macro-value">{mealTotals.netCarbs.toFixed(1)}g</div>
-                  <div className="macro-percent">{mealTotals.carbsPercentage}%</div>
-                </div>
-                <div className="macro">
-                  <div className="macro-label">Fat</div>
-                  <div className="macro-value">{mealTotals.fat.toFixed(1)}g</div>
-                  <div className="macro-percent">{mealTotals.fatPercentage}%</div>
-                </div>
-              </div>
+              <MacroMetrics
+                containerClassName="totals-macros"
+                itemClassName="macro"
+                titleClassName="macro-label"
+                valueClassName="macro-value"
+                percentageClassName="macro-percent"
+                metrics={[
+                  {
+                    key: 'protein',
+                    title: 'Protein',
+                    value: `${mealTotals.protein.toFixed(1)}g`,
+                    percentage: mealTotals.proteinPercentage,
+                  },
+                  {
+                    key: 'carbs',
+                    title: 'Net Carbs',
+                    value: `${mealTotals.netCarbs.toFixed(1)}g`,
+                    percentage: mealTotals.carbsPercentage,
+                  },
+                  {
+                    key: 'fat',
+                    title: 'Fat',
+                    value: `${mealTotals.fat.toFixed(1)}g`,
+                    percentage: mealTotals.fatPercentage,
+                  },
+                ]}
+              />
               <div className="macro-bar">
                 <div 
                   className="protein" 
@@ -461,6 +523,14 @@ const MealFormModal: React.FC<MealFormModalProps> = ({ meal, foods, onClose, onS
                 <div key={food.id} className="food-search-item">
                   <div className="food-info">
                     <span className="food-name">{food.name}</span>
+                    <MacroLabels
+                      labels={getMacroLabelsFromPercentages({
+                        protein: food.protein_percentage,
+                        carbs: food.carbs_percentage,
+                        fat: food.fat_percentage,
+                      })}
+                      className="food-macro-labels"
+                    />
                     <span className="food-stats">
                       {food.calories} cal | P: {food.protein_grams}g | C: {(food.carbs_grams - food.fiber_grams).toFixed(1)}g | F: {food.fat_grams}g
                     </span>
