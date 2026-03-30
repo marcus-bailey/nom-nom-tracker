@@ -84,6 +84,41 @@
   margin-bottom: 15px;
 }
 
+.meal-macros-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.meal-macro-card {
+  text-align: center;
+  padding: 10px;
+  background: var(--tertiary-bg);
+  border-radius: 6px;
+}
+
+.meal-macro-label {
+  font-size: 11px;
+  color: var(--border);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  letter-spacing: 0.5px;
+}
+
+.meal-macro-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--secondary-text);
+  margin-bottom: 3px;
+}
+
+.meal-macro-percent {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--border);
+}
+
 .nutrition-summary {
   margin-bottom: 15px;
 }
