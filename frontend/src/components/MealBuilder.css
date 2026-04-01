@@ -3,6 +3,15 @@
   margin: 0 auto;
 }
 
+.meal-builder .search-box {
+  margin-bottom: 30px;
+}
+
+.meal-builder .search-box input {
+  font-size: 16px;
+  padding: 15px;
+}
+
 .meals-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
