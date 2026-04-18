@@ -33,6 +33,7 @@ const MealBuilder: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
     loadData();
@@ -92,6 +93,11 @@ const MealBuilder: React.FC = () => {
     });
   };
 
+  const filteredMeals = useMemo(
+    () => meals.filter((meal) => meal.name.toLowerCase().includes(searchTerm.toLowerCase())),
+    [meals, searchTerm]
+  );
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -117,8 +123,18 @@ const MealBuilder: React.FC = () => {
         {meals.length === 0 ? (
           <p className="no-results">No meals created yet. Click "Create Meal" to get started!</p>
         ) : (
-          <div className="meals-grid">
-            {meals.map((meal: Meal) => (
+          <>
+            <div className="search-box">
+              <input
+                type="text"
+                placeholder="Search meals..."
+                value={searchTerm}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+            <div className="meals-grid">
+              {filteredMeals.map((meal: Meal) => (
               <div key={meal.id} className="meal-card">
                 <div className="meal-header">
                   <h3>{meal.name}</h3>
@@ -227,7 +243,12 @@ const MealBuilder: React.FC = () => {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+
+            {filteredMeals.length === 0 && (
+              <p className="no-results">No meals found. Try adjusting your search.</p>
+            )}
+          </>
         )}
       </div>
 
