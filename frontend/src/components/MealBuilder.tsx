@@ -382,8 +382,8 @@ const MealFormModal: React.FC<MealFormModalProps> = ({ meal, foods, onClose, onS
   const mealTotals = calculateMealTotals();
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal large-modal" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal large-modal">
         <div className="modal-header">
           <h2>{meal ? 'Edit Meal' : 'Create New Meal'}</h2>
           <button className="close-button" onClick={onClose}>×</button>
