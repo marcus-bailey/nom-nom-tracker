@@ -16,8 +16,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onCancel,
 }) => {
   return (
-    <div className="modal-overlay" onClick={onCancel}>
-      <div className="modal confirm-modal" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal confirm-modal">
         <div className="modal-header">
           <h2>{title}</h2>
           <button className="close-button" onClick={onCancel}>×</button>

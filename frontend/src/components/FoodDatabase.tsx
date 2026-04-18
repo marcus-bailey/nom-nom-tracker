@@ -291,8 +291,8 @@ const FoodFormModal: React.FC<FoodFormModalProps> = ({ food, onClose, onSuccess 
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal">
         <div className="modal-header">
           <h2>{food ? 'Edit Food' : 'Add New Food'}</h2>
           <button className="close-button" onClick={onClose}>×</button>

@@ -388,8 +388,8 @@ const AddEntryModal: React.FC<AddEntryModalProps> = ({ foods, meals, onAdd, onCl
     selectedEntry.item.id === entry.item.id;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal">
         <div className="modal-header">
           <h2>Add Entry</h2>
           <button className="close-button" onClick={onClose}>×</button>
